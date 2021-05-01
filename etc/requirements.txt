@@ -1,0 +1,10 @@
+visdcc
+dash
+dash-core-components
+dash-html-components
+dash-table
+dash-auth
+dash_bootstrap_components
+dash_daq
+dash_ui 
+pathlib

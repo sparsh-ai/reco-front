@@ -1,0 +1,37 @@
+docker-compose up --build
+docker-compose exec cassandra /bin/bash
+cqlsh localhost -ucassandra -pcassandra
+SELECT * FROM demo.click_stream;
+DELETE FROM demo.click_stream WHERE event_name='view' and pk='2021-04-29';
+DELETE FROM demo.click_stream WHERE pk='2021-04-29';
+cqlsh -e 'SELECT * FROM demo.click_stream' > djbabu.txt
+divolte.signal('event', {"item_id": 101321, "event_date":3213213})
+docker-compose exec kafka /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic click_stream --from-beginning
+
+# cassendra
+# https://cassandra.apache.org/doc/latest/operating/bulk_loading.html
+# https://stackoverflow.com/questions/25465904/how-can-i-restore-cassandra-snapshots
+# https://youtu.be/Wnn1QWCG9AI
+nodetool status demo
+nodetool snapshot demo
+nodetool drain
+nodetool listsnapshots
+nodetool refresh demo click_stream
+desc keyspaces;
+drop keyspace demo;
+sstableloader -d localhost -u cassandra -pw cassandra ./bitnami/cassandra/data/data/demo/click_stream-bd088f00a97311eb8bb021ac783c0b68/backups
+sstableloader -d localhost -u cassandra -pw cassandra ./bitnami/cassandra/data/data/demo/click_stream-e4ccc0a0a96f11eb8ccd0f9a13e333bc/snapshots/
+sstableloader -d localhost -u cassandra -pw cassandra ./bitnami/cassandra/data/data/demo/click_stream-a5fb6740a97011eba9a9e709cd27ef9f/snapshots
+cp -r ./bitnami/cassandra/data/data/demo/click_stream-e4ccc0a0a96f11eb8ccd0f9a13e333bc/snapshots/dropped-1619758672627-click_stream/* ./bitnami/cassandra/data/data/demo/click_stream-a1fcd680a97d11eb8862f9bd6c778a7c
+ls ./bitnami/cassandra/data/data/demo/click_stream-a1fcd680a97d11eb8862f9bd6c778a7c
+cp -r ./bitnami/cassandra/data/data/demo/click_stream-e4ccc0a0a96f11eb8ccd0f9a13e333bc/snapshots/dropped-1619758672627-click_stream/* ./bitnami/cassandra/data/data/demo/click_stream-a1fcd680a97d11eb8862f9bd6c778a7c
+ls ./bitnami/cassandra/data/data/demo/click_stream-a1fcd680a97d11eb8862f9bd6c778a7c/snapshots/1619769106897
+source './bitnami/cassandra/data/data/demo/click_stream-bd088f00a97311eb8bb021ac783c0b68/snapshots/dropped-1619764244140-click_stream/schema.cql';
+cp ./bitnami/cassandra/data/data/demo/click_stream-918138e0a98d11eb99c8e3ea1cad2c40/snapshots/1619772028092/*.* ./bitnami/cassandra/data/data/demo/click_stream-5f419390a99011eb99c8e3ea1cad2c40
+cqlsh -u cassandra -pw cassandra -e 'desc keyspace demo' > ./bitnami/cassandra/data/data/demo/click_stream-918138e0a98d11eb99c8e3ea1cad2c40/schema_demo.cql
+source 'click_stream-918138e0a98d11eb99c8e3ea1cad2c40/schema_demo.cql';
+
+docker build -t model1.1 .
+docker run -d --name reco-model-cb -p 8080:80 model1.1
+docker stop reco-model-cb
+docker rm reco-model-cb

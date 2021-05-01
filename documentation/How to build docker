@@ -1,0 +1,4 @@
+docker build -t model1.1 .
+docker run -d --name reco-model-cb -p 8080:80 model1.1
+docker stop reco-model-cb
+docker rm reco-model-cb
