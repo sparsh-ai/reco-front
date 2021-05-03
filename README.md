@@ -1,6 +1,8 @@
 # RecoFront
 ### Building Recommender System from Scratch
 
+![Alt Text](https://j.gifs.com/K8X2lR.gif)
+
 YouTube - https://youtu.be/mYTKy0YQ0tc
 
 Slieshare - https://www.slideshare.net/SparshAgarwal28/reco-front
@@ -12,7 +14,7 @@ Slieshare - https://www.slideshare.net/SparshAgarwal28/reco-front
 3. Model building in python
 4. Recommendation Serving
 
-## How to Start
+## How to Run
 Note: Refer to video for in-depth understanding of the project
 1. Install the python requirements
 2. Go to sandbox subfolder and run docker compose to start the data collector pipeline
